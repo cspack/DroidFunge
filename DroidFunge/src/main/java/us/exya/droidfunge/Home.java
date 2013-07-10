@@ -1,6 +1,6 @@
-package com.example.droidfunge;
+package us.exya.droidfunge;
 
-import com.example.droidfunge.util.SystemUiHider;
+import us.exya.droidfunge.util.SystemUiHider;
 
 import android.annotation.TargetApi;
 import android.app.Activity;

@@ -1,4 +1,4 @@
-package com.example.droidfunge.util;
+package us.exya.droidfunge.util;
 
 import android.app.Activity;
 import android.os.Build;

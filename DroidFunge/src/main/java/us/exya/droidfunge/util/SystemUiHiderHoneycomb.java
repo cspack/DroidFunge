@@ -1,4 +1,4 @@
-package com.example.droidfunge.util;
+package us.exya.droidfunge.util;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
