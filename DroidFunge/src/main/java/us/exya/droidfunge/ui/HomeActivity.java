@@ -1,5 +1,6 @@
-package us.exya.droidfunge;
+package us.exya.droidfunge.ui;
 
+import us.exya.droidfunge.R;
 import us.exya.droidfunge.util.SystemUiHider;
 
 import android.annotation.TargetApi;
@@ -16,11 +17,12 @@ import android.view.View;
  *
  * @see SystemUiHider
  */
-public class Home extends Activity {
+public class HomeActivity extends Activity {
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
      */
+
     private static final boolean AUTO_HIDE = true;
 
     /**
