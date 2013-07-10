@@ -24,11 +24,11 @@ public class Grid<T> {
         this.factory = factory;
     }
 
-    Grid() {
+    public Grid() {
         this(new Point(64, 64));
     }
 
-    Grid(Point sectorSize) {
+    public Grid(Point sectorSize) {
         this.sectorSize = sectorSize;
     }
 

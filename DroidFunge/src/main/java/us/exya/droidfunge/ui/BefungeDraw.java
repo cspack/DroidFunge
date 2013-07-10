@@ -4,11 +4,11 @@ package us.exya.droidfunge.ui;
  * Created by zearen on 10/07/13.
  */
 public class BefungeDraw {
-    BefungeDraw() {
+    public BefungeDraw() {
         info = "";
     }
 
-    BefungeDraw(String info) {
+    public BefungeDraw(String info) {
         this.info = info;
     }
 

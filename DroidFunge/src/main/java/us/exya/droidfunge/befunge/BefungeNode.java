@@ -1,5 +1,7 @@
 package us.exya.droidfunge.befunge;
 
+import android.graphics.Point;
+
 import us.exya.droidfunge.ui.BefungeDraw;
 
 /**
@@ -7,4 +9,12 @@ import us.exya.droidfunge.ui.BefungeDraw;
  */
 public abstract class BefungeNode {
     public abstract BefungeDraw getDraw();
+
+    public abstract void eval(Befunge befunge);
+
+    public void run(Befunge befunge) {
+        eval(befunge);
+        // You have to move afterwards
+        befunge.tiptoe();
+    }
 }
