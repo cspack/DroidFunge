@@ -16,7 +16,7 @@ public class Befunge {
     private Deque<BefungeNode> stack = new LinkedList<BefungeNode>();
     private Direction dir;
     private Point loc;
-    private Grid<BefungeNode> grid = new Grid<BefungeNode>();
+    private Grid<BefungeNode> grid = new Grid<BefungeNode>(BefungeNode.class);
 
     public Deque<BefungeNode> getStack() {
         return stack;

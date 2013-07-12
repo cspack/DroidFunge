@@ -10,16 +10,17 @@ import java.lang.reflect.Array;
  */
 public class Grid<T> {
     protected Point sectorSize;
-    Class<? extends T> tClass;
+    protected  Class<? extends T> tClass;
 
     // We keep track of the local position and size for optimization purposes
     // [curPos] is in absolute coordinates and always in curLevel;
+    // This is protected for a reason.  Exposing it will incite a gnome riot.
     protected Point curPos;
     protected Level curSector;
-    protected Rect  curSize;
 
 
     private class Level {
+        // This is technically unnecessary, but convenient for debugging
         public int level;
         private T[][] items = null;
         public Level[][] children = null;
@@ -40,9 +41,10 @@ public class Grid<T> {
             children = (Level[][]) Array.newInstance(this.getClass(),
                     sectorSize.x, sectorSize.y);
             // Only keep track of a child if it has data in it
-            if (child.modified) {
+            if (child.isModified()) {
                 children[child.relPos.x][child.relPos.y] = child;
                 child.parent = this;
+                modified = true;
             }
             this.level = child.level + 1;
         }
@@ -63,6 +65,10 @@ public class Grid<T> {
             }
         }
 
+        public boolean isModified() {
+            return modified;
+        }
+
         public T getAt(Point pnt) {
             return items
                     [rem(pnt.x, sectorSize.x)]
@@ -74,12 +80,16 @@ public class Grid<T> {
                     [rem(pnt.x, sectorSize.x)]
                     [rem(pnt.y, sectorSize.y)]
                     = item;
-            modified = item != null;
+            // If this item was modified, recursively
+            // set all higher levels as modified.
+            if (!isModified() && item != null) {
+                Level ancestor = parent;
+                while (ancestor != null && !ancestor.isModified()) {
+                    ancestor.modified = true;
+                    ancestor = ancestor.parent;
+                }
+            }
         }
-    }
-
-    public Rect getSize() {
-        return new Rect(curSize);
     }
 
     private Point getSectorSize() {
@@ -96,7 +106,6 @@ public class Grid<T> {
 
         curPos = new Point(0,0);
         curSector = new Level();
-        curSize = new Rect(0,0,0,0);
     }
 
     // Assures modulo is positive
@@ -125,31 +134,61 @@ public class Grid<T> {
                     dest.y - curPos.y);
             Level curLevel = curSector;
             Point relPos = new Point(
-                    rem((curPos.x - sectorSize.x / 2), sectorSize.x),
-                    rem((curPos.y - sectorSize.y / 2), sectorSize.y));
+                    rem((curPos.x + sectorSize.x / 2), sectorSize.x),
+                    rem((curPos.y + sectorSize.y / 2), sectorSize.y));
             Point size = new Point(1,1);
             // The direction we're moving
             boolean xFound = relDest.x == 0;
             boolean yFound = relDest.y == 0;
             while (!(xFound && yFound)) {
-                size.x *= sectorSize.x;
-                size.y *= sectorSize.y;
                 if (xFound) {
-                    relDest.x += size.x * relPos.x;
+                    relDest.x += relPos.x * size.x;
                 }
                 else {
                     if (relDest.x > 0) {
-
+                        relDest.x -= (sectorSize.x - 1 - relPos.x) * size.x;
                         if (relDest.x <= 0) {
                             relDest.x = size.x * sectorSize.x + relDest.x - 1;
                             xFound = true;
                         }
                     }
+                    else {
+                        relDest.x += relPos.x * size.x;
+                        if (relDest.x >= 0) {
+                            xFound = true;
+                        }
+                    }
                 }
+                if (yFound) {
+                    relDest.y += relPos.y * size.y;
+                }
+                else {
+                    if (relDest.y > 0) {
+                        relDest.y -= (sectorSize.y - 1 - relPos.y) * size.y;
+                        if (relDest.y <= 0) {
+                            relDest.y += size.y * sectorSize.y - 1;
+                            yFound = true;
+                        }
+                    }
+                    else {
+                        relDest.y += relPos.y * size.y;
+                        if (relDest.y >= 0) {
+                            yFound = true;
+                        }
+                    }
+                }
+                size.x *= sectorSize.x;
+                size.y *= sectorSize.y;
                 if (curLevel.parent == null) {
                     curLevel.parent = new Level(curLevel);
                 }
+                relPos = curLevel.relPos;
+                boolean wasModified = curLevel.isModified();
                 curLevel = curLevel.parent;
+                // If the previous level wasn't modified, forget it.
+                if (!wasModified) {
+                    curLevel.children[relPos.x][relPos.y] = null;
+                }
             }
             while (curLevel.level > 0) {
                 int x = relDest.x / size.x;
@@ -180,11 +219,14 @@ public class Grid<T> {
                 = item;
     }
 
+    // This gets an array of items in a given rectangle
+    // It's slightly more effecient since it doesn't leave
+    //+ a sector until it has to.
+    // Leaves curPos at bottom right
     public T[][] getSlice(Rect slice) {
-        return null;
-    }
+        T[][] ret = (T[][]) Array.newInstance(tClass,
+                slice.width(), slice.height());
 
-    public T[][] getAll() {
-        return getSlice(curSize);
+        return ret;
     }
 }
