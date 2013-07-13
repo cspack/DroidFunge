@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/DroidFunge/DroidFunge.iml" filepath="$PROJECT_DIR$/DroidFunge/DroidFunge.iml" />
+      <module fileurl="file://$PROJECT_DIR$/DroidFunge/DroidFunge-DroidFunge.iml" filepath="$PROJECT_DIR$/DroidFunge/DroidFunge-DroidFunge.iml" />
       <module fileurl="file://$PROJECT_DIR$/DroidFungeProject.iml" filepath="$PROJECT_DIR$/DroidFungeProject.iml" />
     </modules>
   </component>
