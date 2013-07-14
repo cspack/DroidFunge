@@ -71,14 +71,14 @@ public class Grid<T> {
 
         public T getAt(Point pnt) {
             return items
-                    [rem(pnt.x, sectorSize.x)]
-                    [rem(pnt.y, sectorSize.y)];
+                    [rem(pnt.x + sectorSize.x / 2, sectorSize.x)]
+                    [rem(pnt.y + sectorSize.y / 2, sectorSize.y)];
         }
 
         public void setAt(Point pnt, T item) {
             items
-                    [rem(pnt.x, sectorSize.x)]
-                    [rem(pnt.y, sectorSize.y)]
+                    [rem(pnt.x + sectorSize.x / 2, sectorSize.x)]
+                    [rem(pnt.y + sectorSize.y / 2, sectorSize.y)]
                     = item;
             // If this item was modified, recursively
             // set all higher levels as modified.
@@ -121,8 +121,8 @@ public class Grid<T> {
 
     private Point getSector(Point pnt, Point size) {
         return new Point(
-                Math.abs(pnt.x / size.x),
-                Math.abs(pnt.y / size.y));
+                Math.abs((pnt.x  + sectorSize.x) / size.x),
+                Math.abs((pnt.y + sectorSize.y) / size.y));
     }
 
     // This moves the [curPos] to [dest] creating new
@@ -222,11 +222,53 @@ public class Grid<T> {
     // This gets an array of items in a given rectangle
     // It's slightly more effecient since it doesn't leave
     //+ a sector until it has to.
-    // Leaves curPos at bottom right
+    // Leaves curPos at bottom right corner
     public T[][] getSlice(Rect slice) {
         T[][] ret = (T[][]) Array.newInstance(tClass,
                 slice.width(), slice.height());
+        Point retPos = new Point(0,0);
+        Rect curSlice = new Rect(slice.left, slice.top,
+            Math.min(slice.left * sectorSize.x + sectorSize.x / 2
+                    + sectorSize.x % 2 - 1, slice.right),
+            Math.min(slice.top * sectorSize.y + sectorSize.y / 2
+                    + sectorSize.y % 2 - 1, slice.bottom));
+        while (true) {
+            while (true) {
+                Point pos = new Point(curSlice.left, curSlice.top);
+                moveTo(pos);
 
+                for (; pos.y <= curSlice.bottom; pos.y += 1)
+                for (; pos.x <= curSlice.right; pos.x += 1) {
+                    // This does some expensive math, can optimize if needed
+                    ret[retPos.x][retPos.y] = curSector.getAt(pos);
+                    retPos.x += 1;
+                    retPos.y += 1;
+                }
+
+                if (curSlice.right >= slice.right) {
+                    break;
+                }
+                else {
+                    curSlice.left = slice.right + 1;
+                    curSlice.right = Math.min(
+                            curSlice.right + sectorSize.x, slice.right);
+                }
+            }
+            if (curSlice.bottom >= slice.bottom) {
+                break;
+            }
+            else {
+                curSlice.top = curSlice.bottom + 1;
+                curSlice.bottom = Math.min
+                        (curSlice.bottom + sectorSize.y, slice.bottom);
+            }
+        }
         return ret;
+    }
+
+    // Overrideable for decendent classes that wish to
+    //+ produce a default value
+    protected T ifNull() {
+        return null;
     }
 }

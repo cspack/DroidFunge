@@ -41,6 +41,14 @@ public class BefungeGrid extends Grid<BefungeNode> {
     }
 
     public BefungeNode[][] getAll() {
-        return getSlice(curSize);
+        BefungeNode[][] nodess = getSlice(curSize);
+        // Replace nulls with empty node.
+        for (int i = 0; i < nodess.length; i += 1)
+        for (int j = 0; j < nodess[i].length; i += 1) {
+            if (nodess[i][j] == null) {
+                nodess[i][j] = EmptyNode.EMPTY_NODE;
+            }
+        }
+        return nodess;
     }
 }
