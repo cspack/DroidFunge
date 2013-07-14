@@ -35,7 +35,10 @@ public class BefungeGrid extends Grid<BefungeNode> {
             node = null;
         }
         else {
-            // Check to expand size
+            if (at.x < curSize.left) curSize.left = at.x;
+            if (at.x > curSize.right) curSize.right = at.x;
+            if (at.y < curSize.bottom) curSize.bottom = at.y;
+            if (at.y > curSize.top) curSize.top = at.y;
         }
         super.setAt(at, node);
     }
