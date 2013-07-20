@@ -2,14 +2,17 @@ package us.exya.droidfunge.befunge;
 
 import android.graphics.Point;
 
+import java.util.Deque;
+
 /**
  * Created by zearen on 09/07/13.
  */
-public interface BefungeListener {
+public interface BefungeListener<B extends Befunge> {
     void onMove(Point oldLoc);
-    void onPush(BefungeNode pushed);
-    void onPop(BefungeNode popped);
-    void onModify(Point loc, BefungeNode oldNode);
-    void print(BefungeNode node);
-    BefungeNode input(Class<? extends BefungeNode> requestType);
+    void onStack(Deque<BefungeNode<B>> stack);
+    void onModify(Point loc, BefungeNode<B> oldNode);
+
+    void print(BefungeNode<B> node);
+    BefungeNode<B> input(Class<? extends BefungeNode<B>> requestType);
+    void onEnd(Point loc);
 }

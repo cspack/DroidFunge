@@ -16,7 +16,7 @@ import us.exya.droidfunge.grid.Grid;
  */
 public class Befunge {
     private Deque<BefungeNode> stack = new LinkedList<BefungeNode>();
-    private Direction dir;
+    private Point delta;
     private Point loc;
     private BefungeGrid grid = new BefungeGrid();
     private List<BefungeListener> listeners = new LinkedList<BefungeListener>();
@@ -29,15 +29,9 @@ public class Befunge {
         }
     }
 
-    public void onPush(BefungeNode pushed) {
+    public void onStack() {
         for (BefungeListener listener : listeners) {
-            listener.onPush(pushed);
-        }
-    }
-
-    public void onPop(BefungeNode popped) {
-        for (BefungeListener listener : listeners) {
-            listener.onPop(popped);
+            listener.onStack(stack);
         }
     }
 
@@ -61,6 +55,12 @@ public class Befunge {
         return null;
     }
 
+    public void onEnd(Point loc) {
+        for (BefungeListener listener : listeners) {
+            listener.onEnd(loc);
+        }
+    }
+
     public void addListener(BefungeListener listener) {
         if (listener == null) {
             throw new NullPointerException();
@@ -78,21 +78,26 @@ public class Befunge {
 
     public void push(BefungeNode node) {
         stack.push(node);
-        onPush(node);
+        onStack();
     }
 
     public BefungeNode pop() {
         BefungeNode ret = stack.pop();
-        onPop(ret);
+        onStack();
         return ret;
     }
 
-    public Direction getDir() {
-        return dir;
+    public Point getDelta() {
+        return delta;
+    }
+
+    public void setDelta(Point delta) {
+        this.delta = delta;
     }
 
     public void setDir(Direction dir) {
-        this.dir = dir;
+        delta.set(0,0);
+        dir.offset(delta);
     }
 
     public Point getLoc() {
@@ -107,7 +112,8 @@ public class Befunge {
 
     public void tiptoe() {
         Point oldLoc = new Point(loc);
-        dir.offset(loc);
+        loc.x += delta.x;
+        loc.y += delta.y;
         onMove(oldLoc);
     }
 
