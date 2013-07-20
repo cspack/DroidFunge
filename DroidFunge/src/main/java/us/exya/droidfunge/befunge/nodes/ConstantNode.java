@@ -18,6 +18,6 @@ public class ConstantNode<T, B extends Befunge> extends BefungeNode<B> {
     @Override
     public void eval(B befunge) {
         befunge.getStack().push(this);
-        befunge.onStack();
+        befunge.onStack("Push");
     }
 }

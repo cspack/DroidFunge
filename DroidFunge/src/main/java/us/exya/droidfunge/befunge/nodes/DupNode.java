@@ -18,6 +18,6 @@ public class DupNode<B extends Befunge> extends BefungeNode<B> {
     @Override
     public void eval(B befunge) {
         befunge.getStack().push(befunge.getStack().peek());
-        befunge.onStack();
+        befunge.onStack("Dup");
     }
 }

@@ -18,6 +18,6 @@ public class DropNode<B extends Befunge> extends BefungeNode<B> {
     @Override
     public void eval(B befunge) {
         befunge.getStack().pop();
-        befunge.onStack();
+        befunge.onStack("Drop");
     }
 }

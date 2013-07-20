@@ -19,5 +19,5 @@ public class EmptyNode<B extends Befunge> extends BefungeNode<B> {
     }
 
     @Override
-    public void eval(Befunge befunge) {}
+    public void eval(B befunge) {}
 }

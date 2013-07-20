@@ -8,7 +8,7 @@ import us.exya.droidfunge.ui.BefungeDraw;
 /**
  * Created by zearen on 14/07/13.
  */
-public class ArrowNode<B extends Befunge> extends BefungeNode<B> {
+public class ArrowNode extends BefungeNode {
     private Direction dir;
 
     public static final BefungeDraw NORTH = new BefungeDraw("^");
@@ -40,7 +40,7 @@ public class ArrowNode<B extends Befunge> extends BefungeNode<B> {
     }
 
     @Override
-    public void eval(B befunge) {
+    public void eval(Befunge befunge) {
         befunge.setDir(dir);
     }
 }
