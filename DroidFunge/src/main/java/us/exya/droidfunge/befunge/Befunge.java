@@ -72,15 +72,19 @@ public class Befunge {
         listeners.remove(listener);
     }
 
-    /**
-     * Gets the stack for manipulation.
-     * Note that if you modify it, it is your responsibility to raise the
-     * onStack() event.
-     *
-     * @return The current node stack
-     */
     public Deque<BefungeNode> getStack() {
         return stack;
+    }
+
+    public void push(BefungeNode node) {
+        stack.push(node);
+        onStack();
+    }
+
+    public BefungeNode pop() {
+        BefungeNode ret = stack.pop();
+        onStack();
+        return ret;
     }
 
     public Point getDelta() {
