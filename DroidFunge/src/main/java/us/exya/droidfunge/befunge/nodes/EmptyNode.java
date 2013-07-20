@@ -7,7 +7,7 @@ import us.exya.droidfunge.ui.BefungeDraw;
 /**
  * Created by zearen on 10/07/13.
  */
-public class EmptyNode<B extends Befunge> extends BefungeNode<B> {
+public class EmptyNode<B extends Befunge> implements BefungeNode<B> {
     // There's no need to have more than one
     public static final BefungeNode EMPTY_NODE = new EmptyNode();
 
@@ -20,4 +20,9 @@ public class EmptyNode<B extends Befunge> extends BefungeNode<B> {
 
     @Override
     public void eval(B befunge) {}
+
+    @Override
+    public boolean isTruthy() {
+        return false;
+    }
 }

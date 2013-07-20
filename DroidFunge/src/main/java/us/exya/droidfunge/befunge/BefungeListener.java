@@ -15,4 +15,6 @@ public interface BefungeListener<B extends Befunge> {
     void print(BefungeNode<B> node);
     BefungeNode<B> input(Class<? extends BefungeNode<B>> requestType);
     void onEnd(Point loc);
+
+    void onException(BefungeException ex);
 }

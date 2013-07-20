@@ -5,15 +5,16 @@ import us.exya.droidfunge.befunge.BefungeNode;
 import us.exya.droidfunge.ui.BefungeDraw;
 
 /**
- * Created by zearen on 14/07/13.
+ * Created by zearen on 20/07/13.
  */
-public class ConstantNode<T, B extends Befunge> implements BefungeNode<B> {
-    private T val;
-    private BefungeDraw draw;
+public class InputNode<B extends Befunge> implements BefungeNode<B> {
 
-    public ConstantNode(T val) {
-        this.val = val;
-        draw = new BefungeDraw(val.toString());
+    protected Class<? extends BefungeNode> inputRequest;
+    protected BefungeDraw draw;
+
+    InputNode(Class<? extends BefungeNode> inputRequest, BefungeDraw draw) {
+        this.inputRequest = inputRequest;
+        this.draw = draw;
     }
 
     @Override
@@ -23,7 +24,7 @@ public class ConstantNode<T, B extends Befunge> implements BefungeNode<B> {
 
     @Override
     public void eval(B befunge) {
-        befunge.push(this);
+        befunge.push(befunge.input(inputRequest));
         befunge.onStack("Push");
     }
 

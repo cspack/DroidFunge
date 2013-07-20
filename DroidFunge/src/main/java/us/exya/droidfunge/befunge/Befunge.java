@@ -2,14 +2,12 @@ package us.exya.droidfunge.befunge;
 
 import android.graphics.Point;
 
-import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Stack;
 
+import us.exya.droidfunge.befunge.nodes.EmptyNode;
 import us.exya.droidfunge.grid.Direction;
-import us.exya.droidfunge.grid.Grid;
 
 /**
  * Created by zearen on 09/07/13.
@@ -52,12 +50,18 @@ public class Befunge {
             BefungeNode result = listener.input(requestType);
             if (result != null) return result;
         }
-        return null;
+        return EmptyNode.EMPTY_NODE;
     }
 
     public void onEnd() {
         for (BefungeListener listener : listeners) {
             listener.onEnd(loc);
+        }
+    }
+
+    public void onException(BefungeException ex) {
+        for (BefungeListener listener : listeners) {
+            listener.onException(ex);
         }
     }
 
@@ -74,6 +78,19 @@ public class Befunge {
 
     public Deque<BefungeNode> getStack() {
         return stack;
+    }
+
+    public BefungeNode pop() {
+        if (stack.isEmpty()) {
+            return EmptyNode.EMPTY_NODE;
+        }
+        else {
+            return stack.pop();
+        }
+    }
+
+    public void push(BefungeNode node) {
+        stack.push(node);
     }
 
     public Point getDelta() {
@@ -107,6 +124,7 @@ public class Befunge {
     }
 
     public void step() {
-        grid.getAt(loc).run(this);
+        this.tiptoe();
+        grid.getAt(loc).eval(this);
     }
 }

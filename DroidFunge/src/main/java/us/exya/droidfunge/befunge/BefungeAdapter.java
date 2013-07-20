@@ -28,4 +28,7 @@ public class BefungeAdapter<B extends Befunge> implements BefungeListener<B> {
 
     @Override
     public void onEnd(Point loc) {}
+
+    @Override
+    public void onException(BefungeException ex) {}
 }

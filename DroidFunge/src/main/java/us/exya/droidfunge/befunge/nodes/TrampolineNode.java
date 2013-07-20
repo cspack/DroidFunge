@@ -7,7 +7,7 @@ import us.exya.droidfunge.ui.BefungeDraw;
 /**
  * Created by zearen on 14/07/13.
  */
-public class TrampolineNode<B extends Befunge> extends BefungeNode<B> {
+public class TrampolineNode<B extends Befunge> implements BefungeNode<B> {
     public static final BefungeDraw DRAW = new BefungeDraw("#");
 
     @Override
@@ -18,5 +18,10 @@ public class TrampolineNode<B extends Befunge> extends BefungeNode<B> {
     @Override
     public void eval(B befunge) {
         befunge.tiptoe();
+    }
+
+    @Override
+    public boolean isTruthy() {
+        return true;
     }
 }
