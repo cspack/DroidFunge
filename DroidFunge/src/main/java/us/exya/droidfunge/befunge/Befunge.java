@@ -23,19 +23,19 @@ public class Befunge {
 
     // Event functions.  Note that though these are public, they should really
     //+ be "friend <? extends BefungeNode>"
-    public void onMove(Point newLoc) {
+    public void onMove(Point oldLoc) {
         for (BefungeListener listener : listeners) {
-            listener.onMove(newLoc);
+            listener.onMove(oldLoc);
         }
     }
 
-    public void onStack() {
+    public void onStack(String op) {
         for (BefungeListener listener : listeners) {
-            listener.onStack(stack);
+            listener.onStack(stack, op);
         }
     }
 
-    public void onModify(Point loc, BefungeNode oldNode) {
+    public void onModify(BefungeNode oldNode) {
         for (BefungeListener listener : listeners) {
             listener.onModify(loc, oldNode);
         }
@@ -55,7 +55,7 @@ public class Befunge {
         return null;
     }
 
-    public void onEnd(Point loc) {
+    public void onEnd() {
         for (BefungeListener listener : listeners) {
             listener.onEnd(loc);
         }
@@ -74,17 +74,6 @@ public class Befunge {
 
     public Deque<BefungeNode> getStack() {
         return stack;
-    }
-
-    public void push(BefungeNode node) {
-        stack.push(node);
-        onStack();
-    }
-
-    public BefungeNode pop() {
-        BefungeNode ret = stack.pop();
-        onStack();
-        return ret;
     }
 
     public Point getDelta() {

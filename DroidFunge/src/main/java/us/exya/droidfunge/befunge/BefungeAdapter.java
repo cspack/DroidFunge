@@ -13,7 +13,7 @@ public class BefungeAdapter<B extends Befunge> implements BefungeListener<B> {
     public void onMove(Point oldLoc) {}
 
     @Override
-    public void onStack(Deque<BefungeNode<B>> stack) {}
+    public void onStack(Deque<BefungeNode<B>> stack, String op) {}
 
     @Override
     public void onModify(Point loc, BefungeNode<B> oldNode) {}

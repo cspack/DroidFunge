@@ -9,7 +9,7 @@ import java.util.Deque;
  */
 public interface BefungeListener<B extends Befunge> {
     void onMove(Point oldLoc);
-    void onStack(Deque<BefungeNode<B>> stack);
+    void onStack(Deque<BefungeNode<B>> stack, String op);
     void onModify(Point loc, BefungeNode<B> oldNode);
 
     void print(BefungeNode<B> node);
