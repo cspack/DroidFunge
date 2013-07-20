@@ -5,10 +5,10 @@ import us.exya.droidfunge.befunge.BefungeNode;
 import us.exya.droidfunge.ui.BefungeDraw;
 
 /**
- * Created by zearen on 14/07/13.
+ * Created by zearen on 20/07/13.
  */
-public class DropNode<B extends Befunge> extends BefungeNode<B> {
-    public static final BefungeDraw DRAW = new BefungeDraw("$");
+public class OutputNode<B extends Befunge> extends BefungeNode<B> {
+    public static BefungeDraw DRAW = new BefungeDraw(".");
 
     @Override
     public BefungeDraw getDraw() {
@@ -17,7 +17,7 @@ public class DropNode<B extends Befunge> extends BefungeNode<B> {
 
     @Override
     public void eval(B befunge) {
-        befunge.getStack().pop();
+        befunge.print(befunge.getStack().pop());
         befunge.onStack();
     }
 }

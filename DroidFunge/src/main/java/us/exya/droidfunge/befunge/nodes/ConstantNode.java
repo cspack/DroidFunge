@@ -7,7 +7,7 @@ import us.exya.droidfunge.ui.BefungeDraw;
 /**
  * Created by zearen on 14/07/13.
  */
-public class ConstantNode<T> extends BefungeNode {
+public class ConstantNode<T, B extends Befunge> extends BefungeNode<B> {
     private T val;
     private BefungeDraw draw;
     @Override
@@ -16,7 +16,8 @@ public class ConstantNode<T> extends BefungeNode {
     }
 
     @Override
-    public void eval(Befunge befunge) {
-        befunge.push(this);
+    public void eval(B befunge) {
+        befunge.getStack().push(this);
+        befunge.onStack();
     }
 }

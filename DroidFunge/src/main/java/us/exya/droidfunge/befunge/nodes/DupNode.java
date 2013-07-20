@@ -7,7 +7,7 @@ import us.exya.droidfunge.ui.BefungeDraw;
 /**
  * Created by zearen on 14/07/13.
  */
-public class DupNode extends BefungeNode {
+public class DupNode<B extends Befunge> extends BefungeNode<B> {
     public static final BefungeDraw DRAW = new BefungeDraw(":");
 
     @Override
@@ -16,7 +16,8 @@ public class DupNode extends BefungeNode {
     }
 
     @Override
-    public void eval(Befunge befunge) {
-        befunge.push(befunge.getStack().peek());
+    public void eval(B befunge) {
+        befunge.getStack().push(befunge.getStack().peek());
+        befunge.onStack();
     }
 }
